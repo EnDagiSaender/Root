@@ -9,6 +9,12 @@ public class DragController : MonoBehaviour
     private Vector2 _screenPosition;
     private Vector3 _worldPosition;
     private Draggable _lastDragged;
+    private Color _fade = new Color(0.8f, 0.8f, 0.8f);
+    private Color _full = new Color(1f, 1f, 1f);
+
+    public delegate void UpdateCalculation(int position, int value);
+    public static UpdateCalculation updateCalculation;
+
     void Awake() {
         DragController[] controllers = FindObjectsOfType<DragController>();
         if (controllers.Length > 1){
@@ -42,6 +48,14 @@ public class DragController : MonoBehaviour
                 if(draggable != null){
                     _lastDragged = draggable;
                     InitDrag();
+                    //print(_lastDragged.ActiveInCalculation);
+                    if (_lastDragged.ActiveInCalculation)
+                    {
+                        _lastDragged.ActiveInCalculation = false;
+                        _lastDragged.Sr.color = _full;
+                        //print(_lastDragged.Sr.sortingOrder);
+                        updateCalculation(_lastDragged.Sr.sortingOrder, 0);
+                    }
                 }
             }
         }
