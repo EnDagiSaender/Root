@@ -18,6 +18,7 @@ public class Draggable : MonoBehaviour
     public bool ActiveInCalculation = false;
     public delegate void UpdateCalculation(int position, int value);
     public static UpdateCalculation updateCalculation;
+    public bool NoReroll = false;
     void Start(){
         _collider = GetComponent<Collider2D>();
         _dragController = FindObjectOfType<DragController>();
@@ -64,7 +65,17 @@ public class Draggable : MonoBehaviour
             {
                 _movementDestonation = other.transform.position;
                 //print(gameObject.GetComponentInChildren<TextMeshProUGUI>().text);
-                updateCalculation(Sr.sortingOrder, int.Parse(gameObject.GetComponentInChildren<TextMeshProUGUI>().text));
+                if (Sr.sortingOrder == 6)
+                {
+                    NoReroll = true;
+                    Color tmp = gameObject.GetComponent<SpriteRenderer>().color;
+                    tmp.a = 0.8f;
+                    gameObject.GetComponent<SpriteRenderer>().color = tmp;
+                }
+                else
+                {
+                    updateCalculation(Sr.sortingOrder, int.Parse(gameObject.GetComponentInChildren<TextMeshProUGUI>().text));
+                }
                 Sr.color = _fade;
                 ActiveInCalculation = true;
             }

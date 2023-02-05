@@ -47,6 +47,9 @@ TagManager:
   - name: BG
     uniqueID: 395741745
     locked: 0
+  - name: squares
+    uniqueID: 4146830079
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

@@ -11,6 +11,8 @@ public class DragController : MonoBehaviour
     private Draggable _lastDragged;
     private Color _fade = new Color(0.8f, 0.8f, 0.8f);
     private Color _full = new Color(1f, 1f, 1f);
+    public AudioSource source;
+    public AudioClip diceClip;
 
     public delegate void UpdateCalculation(int position, int value);
     public static UpdateCalculation updateCalculation;
@@ -23,6 +25,18 @@ public class DragController : MonoBehaviour
             
         }
     
+    }
+    private void OnEnable()
+    {
+        button.newRoll += DiceRollSound;
+    }
+    private void OnDisable()
+    {
+        button.newRoll -= DiceRollSound;
+    }
+    public void DiceRollSound()
+    {
+        source.PlayOneShot(diceClip);
     }
     void Update()
     {
@@ -53,8 +67,19 @@ public class DragController : MonoBehaviour
                     {
                         _lastDragged.ActiveInCalculation = false;
                         _lastDragged.Sr.color = _full;
+                        
                         //print(_lastDragged.Sr.sortingOrder);
-                        updateCalculation(_lastDragged.Sr.sortingOrder, 0);
+                        if (_lastDragged.Sr.sortingOrder == 6)
+                        {
+                            _lastDragged.NoReroll = false;
+                            Color tmp = _lastDragged.GetComponent<SpriteRenderer>().color;
+                            tmp.a = 1;
+                            _lastDragged.GetComponent<SpriteRenderer>().color = tmp;
+                        }
+                        else
+                        {
+                            updateCalculation(_lastDragged.Sr.sortingOrder, 0);
+                        }
                     }
                 }
             }
